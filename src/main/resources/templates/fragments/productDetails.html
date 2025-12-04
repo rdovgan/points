@@ -1,5 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<section class="product-details">
+<section class="product-details" th:fragment="fragment">
     <div class="container">
         <div class="product-main">
             <div class="product-gallery">
@@ -11,7 +10,7 @@
                 </div>
             </div>
             <div class="product-info">
-                <h1>${productName != null ? productName : 'Historic Walking Tour'}</h1>
+                <h1 th:text="${productName != null ? productName : 'Historic Walking Tour'}">Historic Walking Tour</h1>
                 <div class="product-rating">
                     <span class="stars">★★★★★</span>
                     <span class="review-count">(124 reviews)</span>

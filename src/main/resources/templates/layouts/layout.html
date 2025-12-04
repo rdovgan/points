@@ -1,11 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${pageTitle != null ? pageTitle : 'Local Experiences'}</title>
+    <title th:text="${pageTitle != null ? pageTitle : 'Local Experiences'}">Local Experiences</title>
     <style>
         /* Basic CSS Reset and Layout Styles */
         * {
@@ -415,9 +413,7 @@
 </head>
 <body>
     <div class="page-content">
-        <c:forEach var="block" items="${blocks}">
-            <jsp:include page="../${block}.jsp" />
-        </c:forEach>
+        <div th:each="block : ${blocks}" th:replace="~{__${block}__ :: fragment}"></div>
     </div>
 </body>
 </html>
