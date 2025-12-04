@@ -33,35 +33,33 @@ jobs:
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.AWS_HOST }}
-          username: ${{ secrets.AWS_USER }}
-          password: ${{ secrets.AWS_PASSWORD }}
+          username: admin
+          key: ${{ secrets.AWS_SSH_KEY }}
           port: 22
           source: "deploy/*"
-          target: "/home/${{ secrets.AWS_USER }}/local-experiences/"
-
+          target: "/home/admin/local-experiences/"
+          
       - name: Build and run Docker on AWS
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.AWS_HOST }}
-          username: ${{ secrets.AWS_USER }}
-          password: ${{ secrets.AWS_PASSWORD }}
+          username: admin
+          key: ${{ secrets.AWS_SSH_KEY }}
           port: 22
           script: |
-            APP_DIR="/home/${USER}/local-experiences"
+            APP_DIR="/home/admin/local-experiences"
             cd "$APP_DIR" || exit 1
-
+      
             echo "Building Docker image..."
-            docker build -t local-experiences:latest .
-
-            echo "Stopping old container (if exists)..."
-            docker stop local-experiences || true
-            docker rm local-experiences || true
-
+            sudo docker build -t local-experiences:latest .
+      
+            echo "Stopping old container..."
+            sudo docker stop local-experiences || true
+            sudo docker rm local-experiences || true
+      
             echo "Starting new container..."
-            docker run -d \
+            sudo docker run -d \
               --name local-experiences \
               -p 8080:8080 \
               --restart=always \
               local-experiences:latest
-
-            echo "Deployment via Docker finished."
