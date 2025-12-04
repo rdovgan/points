@@ -1,4 +1,4 @@
-name: Build and Deploy to AWS
+name: Build and Deploy Docker to AWS
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,22 +17,28 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: '21'           # зміни, якщо у проєкту інша версія
 
       - name: Build with Maven
         run: mvn -B clean package -DskipTests
 
-      - name: Copy JAR to AWS
+      - name: Prepare deployment folder
+        run: |
+          mkdir -p deploy
+          cp target/local-experiences-1.0-SNAPSHOT.jar deploy/
+          cp Dockerfile deploy/
+
+      - name: Copy files to AWS server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USER }}
           password: ${{ secrets.AWS_PASSWORD }}
           port: 22
-          source: "target/local-experiences-1.0-SNAPSHOT.jar"
+          source: "deploy/*"
           target: "/home/${{ secrets.AWS_USER }}/local-experiences/"
 
-      - name: Restart app on AWS
+      - name: Build and run Docker on AWS
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.AWS_HOST }}
@@ -41,13 +47,20 @@ jobs:
           port: 22
           script: |
             APP_DIR="/home/${USER}/local-experiences"
-            mkdir -p "$APP_DIR"
             cd "$APP_DIR" || exit 1
 
-            echo "Stopping old process..."
-            pkill -f "local-experiences-1.0-SNAPSHOT.jar" || true
+            echo "Building Docker image..."
+            docker build -t local-experiences:latest .
 
-            echo "Starting new process..."
-            nohup java -jar local-experiences-1.0-SNAPSHOT.jar > app.log 2>&1 &
+            echo "Stopping old container (if exists)..."
+            docker stop local-experiences || true
+            docker rm local-experiences || true
 
-            echo "Deployment finished."
+            echo "Starting new container..."
+            docker run -d \
+              --name local-experiences \
+              -p 8080:8080 \
+              --restart=always \
+              local-experiences:latest
+
+            echo "Deployment via Docker finished."
