@@ -1,0 +1,29 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<section class="offers">
+    <div class="container">
+        <h2>Featured Experiences</h2>
+        <div class="offers-grid">
+            <div class="offer-card">
+                <img src="/images/tour.jpg" alt="City Tour">
+                <h3>Historic City Tour</h3>
+                <p>Explore the rich history of our city with an expert guide</p>
+                <span class="price">$49</span>
+                <a href="#" class="btn">Book Now</a>
+            </div>
+            <div class="offer-card">
+                <img src="/images/cooking.jpg" alt="Cooking Class">
+                <h3>Traditional Cooking Class</h3>
+                <p>Learn to cook authentic local dishes</p>
+                <span class="price">$65</span>
+                <a href="#" class="btn">Book Now</a>
+            </div>
+            <div class="offer-card">
+                <img src="/images/art.jpg" alt="Art Workshop">
+                <h3>Art Workshop</h3>
+                <p>Create your own masterpiece with local artists</p>
+                <span class="price">$55</span>
+                <a href="#" class="btn">Book Now</a>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,54 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<section class="product-details">
+    <div class="container">
+        <div class="product-main">
+            <div class="product-gallery">
+                <img src="/images/product-main.jpg" alt="Product" class="main-image">
+                <div class="thumbnail-gallery">
+                    <img src="/images/thumb1.jpg" alt="Thumbnail 1">
+                    <img src="/images/thumb2.jpg" alt="Thumbnail 2">
+                    <img src="/images/thumb3.jpg" alt="Thumbnail 3">
+                </div>
+            </div>
+            <div class="product-info">
+                <h1>${productName != null ? productName : 'Historic Walking Tour'}</h1>
+                <div class="product-rating">
+                    <span class="stars">★★★★★</span>
+                    <span class="review-count">(124 reviews)</span>
+                </div>
+                <div class="product-price">
+                    <span class="price">$49.00</span>
+                    <span class="price-unit">per person</span>
+                </div>
+                <div class="product-description">
+                    <h3>About This Experience</h3>
+                    <p>Join us for an unforgettable journey through the historic heart of the city.
+                    Our expert guides will take you through hidden alleys, magnificent architecture,
+                    and share fascinating stories from centuries past.</p>
+                </div>
+                <div class="product-features">
+                    <h3>What's Included</h3>
+                    <ul>
+                        <li>Professional local guide</li>
+                        <li>2-hour walking tour</li>
+                        <li>Entry to historical sites</li>
+                        <li>Complimentary refreshments</li>
+                    </ul>
+                </div>
+                <div class="booking-form">
+                    <form action="/book" method="post">
+                        <div class="form-group">
+                            <label>Date:</label>
+                            <input type="date" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Guests:</label>
+                            <input type="number" name="guests" min="1" max="10" value="2" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-large">Book Now</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

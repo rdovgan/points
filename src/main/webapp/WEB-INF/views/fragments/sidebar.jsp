@@ -1,0 +1,22 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<aside class="sidebar">
+    <div class="sidebar-widget">
+        <h3>Categories</h3>
+        <ul>
+            <li><a href="#">Tours</a></li>
+            <li><a href="#">Workshops</a></li>
+            <li><a href="#">Food & Drink</a></li>
+            <li><a href="#">Outdoor Activities</a></li>
+            <li><a href="#">Cultural Events</a></li>
+        </ul>
+    </div>
+    <div class="sidebar-widget">
+        <h3>Popular Destinations</h3>
+        <ul>
+            <li><a href="#">Downtown</a></li>
+            <li><a href="#">Waterfront</a></li>
+            <li><a href="#">Historic District</a></li>
+            <li><a href="#">Arts Quarter</a></li>
+        </ul>
+    </div>
+</aside>
