@@ -15,24 +15,21 @@ import java.util.Map;
  */
 public class DotenvConfig implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    @Override
-    public void initialize(ConfigurableApplicationContext applicationContext) {
-        ConfigurableEnvironment environment = applicationContext.getEnvironment();
+	@Override
+	public void initialize(ConfigurableApplicationContext applicationContext) {
+		ConfigurableEnvironment environment = applicationContext.getEnvironment();
 
-        // Load .env file (will look in project root by default)
-        Dotenv dotenv = Dotenv.configure()
-                .ignoreIfMissing()  // Don't fail if .env doesn't exist (e.g., in production)
-                .load();
+		// Load .env file (will look in project root by default)
+		Dotenv dotenv = Dotenv.configure().ignoreIfMissing()  // Don't fail if .env doesn't exist (e.g., in production)
+				.load();
 
-        // Create a map of environment variables from .env file
-        Map<String, Object> envMap = new HashMap<>();
-        dotenv.entries().forEach(entry -> {
-            envMap.put(entry.getKey(), entry.getValue());
-        });
+		// Create a map of environment variables from .env file
+		Map<String, Object> envMap = new HashMap<>();
+		dotenv.entries().forEach(entry -> {
+			envMap.put(entry.getKey(), entry.getValue());
+		});
 
-        // Add .env variables to Spring environment with higher priority
-        environment.getPropertySources().addFirst(
-                new MapPropertySource("dotenvProperties", envMap)
-        );
-    }
+		// Add .env variables to Spring environment with higher priority
+		environment.getPropertySources().addFirst(new MapPropertySource("dotenvProperties", envMap));
+	}
 }

@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class TestController {
 
-    private static final Logger logger = LoggerFactory.getLogger(TestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(TestController.class);
 
-    @GetMapping
-    public String hello() {
-        logger.debug("TestController /test invoked");
-        return "OK";
-    }
+	@GetMapping
+	public String hello() {
+		logger.debug("TestController /test invoked");
+		return "OK";
+	}
 }
 
