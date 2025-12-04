@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.company</groupId>
 	<artifactId>local-experiences</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Local Experiences</name>
 	<description>Demo project</description>
