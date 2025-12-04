@@ -1,0 +1,53 @@
+name: Build and Deploy to AWS
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Build with Maven
+        run: mvn -B clean package -DskipTests
+
+      - name: Copy JAR to AWS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          password: ${{ secrets.AWS_PASSWORD }}
+          port: 22
+          source: "target/local-experiences-1.0-SNAPSHOT.jar"
+          target: "/home/${{ secrets.AWS_USER }}/local-experiences/"
+
+      - name: Restart app on AWS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          password: ${{ secrets.AWS_PASSWORD }}
+          port: 22
+          script: |
+            APP_DIR="/home/${USER}/local-experiences"
+            mkdir -p "$APP_DIR"
+            cd "$APP_DIR" || exit 1
+
+            echo "Stopping old process..."
+            pkill -f "local-experiences-1.0-SNAPSHOT.jar" || true
+
+            echo "Starting new process..."
+            nohup java -jar local-experiences-1.0-SNAPSHOT.jar > app.log 2>&1 &
+
+            echo "Deployment finished."
