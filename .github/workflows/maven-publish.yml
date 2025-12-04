@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: DEMO  # Use DEMO environment for secrets
 
     steps:
       - name: Checkout
@@ -17,7 +18,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '21'           # зміни, якщо у проєкту інша версія
+          java-version: '21'
 
       - name: Build with Maven
         run: mvn -B clean package -DskipTests
@@ -27,6 +28,7 @@ jobs:
           mkdir -p deploy
           cp target/local-experiences-1.0-SNAPSHOT.jar deploy/
           cp Dockerfile deploy/
+          cp deployment/application-prod.properties deploy/ || true
 
 
       - name: Copy files to AWS server
@@ -48,18 +50,28 @@ jobs:
           port: 10110
           script: |
             APP_DIR="/home/admin/local-experiences"
-            cd "$APP_DIR" || exit 1
-      
+            cd "$APP_DIR/deploy" || exit 1
+
             echo "Building Docker image..."
             sudo docker build -t local-experiences:latest .
-      
+
             echo "Stopping old container..."
             sudo docker stop local-experiences || true
             sudo docker rm local-experiences || true
-      
+
             echo "Starting new container..."
             sudo docker run -d \
               --name local-experiences \
               -p 8080:8080 \
               --restart=always \
+              -e DB_HOST="${{ secrets.DB_HOST }}" \
+              -e DB_PORT="${{ secrets.DB_PORT }}" \
+              -e DB_NAME="${{ secrets.DB_NAME }}" \
+              -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
+              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
               local-experiences:latest
+
+            echo "Deployment complete! Checking status..."
+            sleep 5
+            sudo docker ps | grep local-experiences
+            sudo docker logs local-experiences --tail 50
