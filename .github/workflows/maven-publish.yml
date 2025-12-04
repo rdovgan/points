@@ -35,7 +35,7 @@ jobs:
           host: ${{ secrets.AWS_HOST }}
           username: admin
           key: ${{ secrets.AWS_SSH_KEY }}
-          port: 22
+          port: 10110
           source: "deploy/*"
           target: "/home/admin/local-experiences/"
           
@@ -45,7 +45,7 @@ jobs:
           host: ${{ secrets.AWS_HOST }}
           username: admin
           key: ${{ secrets.AWS_SSH_KEY }}
-          port: 22
+          port: 10110
           script: |
             APP_DIR="/home/admin/local-experiences"
             cd "$APP_DIR" || exit 1
