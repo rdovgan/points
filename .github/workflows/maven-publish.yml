@@ -28,6 +28,7 @@ jobs:
           cp target/local-experiences-1.0-SNAPSHOT.jar deploy/
           cp Dockerfile deploy/
 
+
       - name: Copy files to AWS server
         uses: appleboy/scp-action@v0.1.7
         with:
