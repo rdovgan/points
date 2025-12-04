@@ -413,7 +413,9 @@
 </head>
 <body>
 <div class="page-content">
-	<div th:each="block : ${blocks}" th:replace="${block} :: fragment"></div>
+	<th:block th:each="block : ${blocks}">
+		<th:block th:replace="~{${block} :: fragment}" />
+	</th:block>
 </div>
 </body>
 </html>
